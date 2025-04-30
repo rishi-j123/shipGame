@@ -19,7 +19,7 @@ async fn main() {
             ship.turn_angle(-5.0);
         }
         if is_key_down(KeyCode::W) {
-            ship.move_forward(5.0);
+            ship.move_forward(10.0);
         }
 
         ship.move_towards_mouse(10.0);

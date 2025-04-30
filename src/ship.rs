@@ -1,5 +1,4 @@
 use macroquad::prelude::*;
-use std::f32::consts::PI;
 
 pub const SHIP_LENGTH_TO_TIP: f32 = 12.5;
 pub const SHIP_LENGTH_TO_REAR: f32 = 12.5;
@@ -68,6 +67,8 @@ impl Ship {
         self.angle += angle;
         if self.angle >= 360.0 {
             self.angle -= 360.0;
+        } else if self.angle < 0.0 {
+            self.angle += 360.0;
         }
     }
 
@@ -79,19 +80,20 @@ impl Ship {
         self.y = self.y - distance_y;
     }
 
-    // pub fn move_towards_mouse(&mut self, distance: f32) {
-    //     let mouse_pos = mouse_position();
-    //     let delta_angle:f32 = {
-    //         let dx = mouse_pos.0 - self.x;
-    //         let dy = -(mouse_pos.1 - self.y);
-    //         let mut target_angle = f32::atan2(dy,dx).to_degrees();
-    //         match target_angle < 0.0 {
-    //             true => target_angle = 180.0 + (180.0 + target_angle),
-    //             false => (),
-    //         }
-    //         if target_angle = 360.0 {
-    //             target_angle = 0.0;
-    //         }
-    //     };
-    // }
+    pub fn move_towards_mouse(&mut self, distance: f32) {
+        let mouse_pos = mouse_position();
+        let delta_angle = {
+            let dx = mouse_pos.0 - self.x;
+            let dy = -(mouse_pos.1 - self.y);
+            let mut target_angle = f32::atan2(dy,dx).to_degrees();
+            match target_angle < 0.0 {
+                true => target_angle = 180.0 + (180.0 + target_angle),
+                false => (),
+            }
+            if target_angle == 360.0 {
+                target_angle = 0.0;
+            }
+
+        };
+    }
 }
