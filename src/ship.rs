@@ -12,7 +12,7 @@ pub struct Ship {
     pub color: Color,
 }
 
-struct OffsetList {
+pub struct OffsetList {
     tx: f32,
     ty: f32,
     blx: f32,
@@ -80,20 +80,35 @@ impl Ship {
         self.y = self.y - distance_y;
     }
 
-    pub fn move_towards_mouse(&mut self, distance: f32) {
-        let mouse_pos = mouse_position();
-        let delta_angle = {
-            let dx = mouse_pos.0 - self.x;
-            let dy = -(mouse_pos.1 - self.y);
-            let mut target_angle = f32::atan2(dy,dx).to_degrees();
-            match target_angle < 0.0 {
-                true => target_angle = 180.0 + (180.0 + target_angle),
-                false => (),
-            }
-            if target_angle == 360.0 {
-                target_angle = 0.0;
-            }
+    // pub fn move_towards_mouse(&mut self, distance: f32, limit: f32) {
+    //     if self.dist_from_mouse() > limit {
+    //         let delta_angle = self.mouse_delta_angle();
+    //         self.turn_angle(delta_angle);
+    //         self.move_forward(distance);
+    //     }
+    // }
 
-        };
+    pub fn dist_from_mouse(&self) -> f32 {
+        let mouse_pos = mouse_position();
+        let dx = mouse_pos.0 - self.x;
+        let dy = -(mouse_pos.1 - self.y);
+        f32::sqrt(dx.powf(2.0) + dy.powf(2.0))
+    }
+
+    pub fn mouse_delta_angle(&mut self) {
+        let mouse_pos = mouse_position();
+        let dx = mouse_pos.0 - self.x;
+        let dy = -(mouse_pos.1 - self.y);
+
+        let mut target_angle = f32::atan2(dy,dx).to_degrees();
+        match target_angle < 0.0 {
+            true => target_angle = 180.0 + (180.0 + target_angle),
+            false => (),
+        }
+        if target_angle == 360.0 {
+            target_angle = 0.0;
+        }
+
+        println!("dx: {}, dy: {}, target: {}", dx, dy, target_angle);
     }
 }

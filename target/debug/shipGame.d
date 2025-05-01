@@ -1,1 +1,1 @@
-C:\Users\Rishi\rust\projects\shipGame\target\debug\shipGame.exe: C:\Users\Rishi\rust\projects\shipGame\src\main.rs C:\Users\Rishi\rust\projects\shipGame\src\ship.rs
+/Users/64008962/rust/bored/macroquad/shipGame/target/debug/shipGame: /Users/64008962/rust/bored/macroquad/shipGame/src/main.rs /Users/64008962/rust/bored/macroquad/shipGame/src/ship.rs
