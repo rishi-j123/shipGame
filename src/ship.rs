@@ -107,18 +107,18 @@ impl Ship {
     }
 }
 
-pub fn inputs_handler(ship: &mut Ship) {
+pub fn inputs_handler(ship: &mut Ship, turn_amount: f32, forward_dist: f32) {
     if is_key_pressed(KeyCode::Space) {
         ship.x = screen_width() / 2.0;
         ship.y = screen_height() / 2.0;
     }
     if is_key_down(KeyCode::A) {
-        ship.turn_angle(5.0);
+        ship.turn_angle(turn_amount);
     }
     if is_key_down(KeyCode::D) {
-        ship.turn_angle(-5.0);
+        ship.turn_angle(-turn_amount);
     }
     if is_key_down(KeyCode::W) {
-        ship.move_forward(10.0);
+        ship.move_forward(forward_dist);
     }
 }

@@ -18,20 +18,18 @@ impl ShipInitiator {
         }
     }
 
-    pub fn fleet_follow_mouse(&mut self, distance: f32, limit: f32, dist_stagger: f32, limitStagger: f32) {
+    pub fn fleet_follow_mouse(&mut self, distance: f32, limit: f32, dist_stagger: f32, limit_stagger: f32) {
         let mut count = 0.0;
-        for mut ship in &mut self.fleet {
-            let limitOffset = limitStagger * count;
-            let distOffset = dist_stagger * count;
-            ship.move_towards_mouse(distance - distOffset, limit + limitOffset);
+        for ship in &mut self.fleet {
+            let limit_offset = limit_stagger * count;
+            let dist_offset = dist_stagger * count;
+            ship.move_towards_mouse(distance - dist_offset, limit + limit_offset);
             count += 1.0;
         }
     }
 
     pub fn draw(&mut self) {
-        let mut count= 0;
-        for mut ship in &mut self.fleet {
-            count += 1;
+        for ship in &mut self.fleet.iter().rev() {
             ship.draw();
         }
     }
@@ -39,7 +37,6 @@ impl ShipInitiator {
 
 pub fn generate_color_list(target_length: usize, input_colors: Vec<Color>) -> Vec<Color> {
     let mut colors = Vec::new();
-    let mut input_colors_length = input_colors.len();
     let mut index = 0;
 
     loop {
