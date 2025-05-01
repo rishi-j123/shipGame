@@ -65,11 +65,6 @@ impl Ship {
 
     pub fn turn_angle(&mut self, angle: f32) {
         self.angle += angle;
-        if self.angle >= 360.0 {
-            self.angle -= 360.0;
-        } else if self.angle < 0.0 {
-            self.angle += 360.0;
-        }
     }
 
     pub fn move_forward(&mut self, distance: f32) {
@@ -80,13 +75,13 @@ impl Ship {
         self.y = self.y - distance_y;
     }
 
-    // pub fn move_towards_mouse(&mut self, distance: f32, limit: f32) {
-    //     if self.dist_from_mouse() > limit {
-    //         let delta_angle = self.mouse_delta_angle();
-    //         self.turn_angle(delta_angle);
-    //         self.move_forward(distance);
-    //     }
-    // }
+    pub fn move_towards_mouse(&mut self, distance: f32, limit: f32) {
+        if self.dist_from_mouse() > limit {
+            let delta_angle = self.mouse_delta_angle();
+            self.turn_angle(delta_angle);
+            self.move_forward(distance);
+        }
+    }
 
     pub fn dist_from_mouse(&self) -> f32 {
         let mouse_pos = mouse_position();
@@ -95,20 +90,35 @@ impl Ship {
         f32::sqrt(dx.powf(2.0) + dy.powf(2.0))
     }
 
-    pub fn mouse_delta_angle(&mut self) {
+    pub fn mouse_delta_angle(&mut self) -> f32 {
         let mouse_pos = mouse_position();
         let dx = mouse_pos.0 - self.x;
         let dy = -(mouse_pos.1 - self.y);
 
         let mut target_angle = f32::atan2(dy,dx).to_degrees();
-        match target_angle < 0.0 {
-            true => target_angle = 180.0 + (180.0 + target_angle),
-            false => (),
+        if target_angle < 0.0 {
+            target_angle = 180.0 + (180.0 + target_angle);
         }
         if target_angle == 360.0 {
             target_angle = 0.0;
         }
 
-        println!("dx: {}, dy: {}, target: {}", dx, dy, target_angle);
+        target_angle - self.angle
+    }
+}
+
+pub fn inputs_handler(ship: &mut Ship) {
+    if is_key_pressed(KeyCode::Space) {
+        ship.x = screen_width() / 2.0;
+        ship.y = screen_height() / 2.0;
+    }
+    if is_key_down(KeyCode::A) {
+        ship.turn_angle(5.0);
+    }
+    if is_key_down(KeyCode::D) {
+        ship.turn_angle(-5.0);
+    }
+    if is_key_down(KeyCode::W) {
+        ship.move_forward(10.0);
     }
 }
