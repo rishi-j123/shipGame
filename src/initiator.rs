@@ -1,4 +1,4 @@
-use macroquad::color::Color;
+use macroquad::color::{Color, WHITE};
 use crate::ship::Ship;
 
 pub struct ShipInitiator {
@@ -10,7 +10,7 @@ impl ShipInitiator {
         let mut fleet: Vec<Ship> = Vec::new();
         let color_vec = generate_color_list(count as usize, color_pattern);
         for i in 0..count {
-            fleet.push(Ship::new(x, y, angle, color_vec[i as usize]));
+            fleet.push(Ship::new(x, y, angle, color_vec[i as usize], false, WHITE, 1.0));
         }
 
         ShipInitiator {

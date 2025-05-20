@@ -8,7 +8,7 @@ use crate::ship::{inputs_handler, Ship};
 
 #[macroquad::main("shipGame")]
 async fn main() {
-    let mut ship = Ship::new(100.0, 100.0, 90.0, WHITE);
+    let mut ship = Ship::new(100.0, 100.0, 90.0, WHITE, true, RED, 2.0);
     let mut fleet = initiator::ShipInitiator::new(
         10,
         100.0,
@@ -18,11 +18,11 @@ async fn main() {
 
     clear_background(BLACK);
     loop {
-        inputs_handler(&mut ship, 15.0, 10.0);
+        inputs_handler(&mut ship, 10.0, 10.0);
         fleet.fleet_follow_mouse(20.0, 10.0, 0.5, 15.0,);
 
-        fleet.draw();
         ship.draw();
+        fleet.draw();
         next_frame().await;
     }
 }

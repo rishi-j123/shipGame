@@ -1,3 +1,4 @@
+use macroquad::input::KeyCode::Backspace;
 use macroquad::prelude::*;
 
 pub const SHIP_LENGTH_TO_TIP: f32 = 12.5;
@@ -10,6 +11,10 @@ pub struct Ship {
     pub y: f32,
     pub angle: f32,
     pub color: Color,
+    pub trail_bool: bool,
+    trail_vec: Vec<(f32, f32)>,
+    pub trail_color: Color,
+    pub trail_weight: f32,
 }
 
 pub struct OffsetList {
@@ -22,12 +27,16 @@ pub struct OffsetList {
 }
 
 impl Ship {
-    pub fn new(x: f32, y: f32, angle: f32, color: Color) -> Self {
+    pub fn new(x: f32, y: f32, angle: f32, color: Color, trail: bool, trail_color: Color, trail_weight: f32) -> Self {
         Self{
             x,
             y,
             angle,
             color,
+            trail_bool: trail,
+            trail_vec: Vec::<(f32,f32)>::new(),
+            trail_color,
+            trail_weight,
         }
     }
 
@@ -54,6 +63,12 @@ impl Ship {
     }
 
     pub fn draw(&self) {
+        if self.trail_bool {
+            for dot in self.trail_vec.iter() {
+                draw_circle(dot.0, dot.1, self.trail_weight, self.trail_color);
+            }
+        }
+
         let offsets = self.get_offsets();
 
         // -y due to y-axis being flipped: y0 is at top of screen
@@ -61,6 +76,10 @@ impl Ship {
         let back_left = Vec2::new(self.x + offsets.blx, self.y - offsets.bly);
         let back_right = Vec2::new(self.x + offsets.brx, self.y - offsets.bry);
         draw_triangle(tip, back_left, back_right, self.color);
+    }
+
+    pub fn add_trail_dot(&mut self) {
+        self.trail_vec.push((self.x, self.y));
     }
 
     pub fn turn_angle(&mut self, angle: f32) {
@@ -120,5 +139,11 @@ pub fn inputs_handler(ship: &mut Ship, turn_amount: f32, forward_dist: f32) {
     }
     if is_key_down(KeyCode::W) {
         ship.move_forward(forward_dist);
+    }
+    if is_key_down(KeyCode::Enter) {
+        ship.add_trail_dot();
+    }
+    if is_key_down(Backspace) {
+        ship.trail_vec = Vec::new();
     }
 }
